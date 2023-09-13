@@ -1,1 +1,3 @@
-﻿
+﻿#calculator by Tommaso Curti
+###Progetto realizzato con la 4B INF
+lo scopo del progetto **calculator** è produrre un clone...
