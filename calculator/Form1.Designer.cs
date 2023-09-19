@@ -1,6 +1,6 @@
 ﻿namespace calculator
 {
-    partial class Form1
+    partial class frmMain
     {
         /// <summary>
         /// Variabile di progettazione necessaria.
@@ -42,7 +42,6 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "0";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // panel1
             // 
@@ -52,15 +51,17 @@
             this.panel1.Size = new System.Drawing.Size(324, 61);
             this.panel1.TabIndex = 1;
             // 
-            // Form1
+            // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(324, 481);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.panel1);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.MaximizeBox = false;
+            this.Name = "frmMain";
+            this.Text = "Calcolatrice";
+            this.Load += new System.EventHandler(this.frmMain_Load);
             this.ResumeLayout(false);
 
         }
