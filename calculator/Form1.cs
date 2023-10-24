@@ -5,11 +5,12 @@ using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Calculator_2023
+namespace Calculator2023
 {
     public partial class FormMain : Form
     {
@@ -51,10 +52,9 @@ namespace Calculator_2023
 
         float lblResultBaseFontSize;
         const int lblResultWidthMargin = 24;
-        const int lblResultMaxDigit = 25;
-
-        char lastOperator = ' ';
         decimal operand1, operand2, result;
+        const int lblResultMaxDigit = 25;
+        char lastOperator = ' ';
         BtnStruct lastButtonClicked;
 
         public FormMain()
@@ -105,7 +105,10 @@ namespace Calculator_2023
             switch (clickedButtonStruct.Type)
             {
                 case SymbolType.Number:
-                    if (lblResult.Text == "0" || lastButtonClicked.Type == SymbolType.Operator) lblResult.Text = "";
+                    if (lastButtonClicked.Content == '=')
+                        ClearAll();
+                    if (lblResult.Text == "0" || lastButtonClicked.Type == SymbolType.Operator)
+                        lblResult.Text = "";
                     lblResult.Text += clickedButton.Text;
                     break;
                 case SymbolType.SpecialOperator:
@@ -148,8 +151,10 @@ namespace Calculator_2023
                     ClearAll();
                     break;
                 case SymbolType.ClearEntry:
-                    if (lastButtonClicked.Content == '=') ClearAll();
-                    else lblResult.Text = "0";
+                    if (lastButtonClicked.Content == '=')
+                        ClearAll();
+                    else
+                        lblResult.Text = "0";
                     break;
                 case SymbolType.Undefined:
                     break;
@@ -158,7 +163,21 @@ namespace Calculator_2023
             }
             if (clickedButtonStruct.Type != SymbolType.Backspace && clickedButtonStruct.Type != SymbolType.PlusMinusSign)
                 lastButtonClicked = clickedButtonStruct;
+
+            HandleHistory(clickedButtonStruct);
         }
+
+        private void HandleHistory(BtnStruct clickedButtonStruct)
+        {
+            if (clickedButtonStruct.Type != SymbolType.PlusMinusSign && clickedButtonStruct.Content != '=' && clickedButtonStruct.Type != SymbolType.ClearEntry && clickedButtonStruct.Type != SymbolType.Backspace && clickedButtonStruct.Type != SymbolType.ClearAll)
+                lblOperators.Text += clickedButtonStruct.Content + " ";
+            else if (clickedButtonStruct.Type == SymbolType.ClearAll)
+                lblOperators.Text = "";
+            else if (clickedButtonStruct.Content == '=')
+                lblOperators.Text += clickedButtonStruct.Content + " " + result;
+
+        }
+
 
         private void ClearAll()
         {
@@ -177,13 +196,13 @@ namespace Calculator_2023
                 case '%':
                     result = operand1 * operand2 / 100;
                     break;
-                case '\u215F':  // 1/x
+                case '\u215F':
                     result = 1 / operand2;
                     break;
-                case '\u00B2':  // x^2
+                case '\u00B2':
                     result = operand2 * operand2;
                     break;
-                case '\u221A':  // sqr(x)
+                case '\u221A':
                     result = (decimal)Math.Sqrt((double)operand2);
                     break;
                 default:
@@ -197,11 +216,13 @@ namespace Calculator_2023
             if (lastOperator == ' ')
             {
                 operand1 = decimal.Parse(lblResult.Text);
-                if (clickedButtonStruct.Content != '=') lastOperator = clickedButtonStruct.Content;
+                if (clickedButtonStruct.Content != '=')
+                    lastOperator = clickedButtonStruct.Content;
             }
             else
             {
-                if (lastButtonClicked.Content != '=') operand2 = decimal.Parse(lblResult.Text);
+                if (lastButtonClicked.Content != '=')
+                    operand2 = decimal.Parse(lblResult.Text);
                 switch (lastOperator)
                 {
                     case '+':
@@ -211,10 +232,26 @@ namespace Calculator_2023
                         result = operand1 - operand2;
                         break;
                     case '\u00D7':
-                        result = operand1 * operand2;
+                        if (operand2 != 0)
+                        {
+                            result = operand1 * operand2;
+                        }
+                        else
+                        {
+                            lblResult.Text = "Error: Division by zero";
+                            return;
+                        }
                         break;
                     case '\u00F7':
-                        result = operand1 / operand2;
+                        if (operand2 != 0)
+                        {
+                            result = operand1 / operand2;
+                        }
+                        else
+                        {
+                            lblResult.Text = "Error: Division by zero";
+                            return;
+                        }
                         break;
                     default:
                         break;
@@ -223,11 +260,14 @@ namespace Calculator_2023
                 if (clickedButtonStruct.Content != '=')
                 {
                     lastOperator = clickedButtonStruct.Content;
-                    if (lastButtonClicked.Content == '=') operand2 = 0;
+                    if (lastButtonClicked.Content == '=')
+                        operand2 = 0;
                 }
                 lblResult.Text = result.ToString();
             }
         }
+
+
 
         private void lblResult_TextChanged(object sender, EventArgs e)
         {
@@ -245,14 +285,16 @@ namespace Calculator_2023
                     0 :
                     lblResult.Text.Length - decimalSeparatorPosition - 1;
                 stOut = num.ToString("N", nfi);
-                if (lblResult.Text.IndexOf(",") == lblResult.Text.Length - 1) stOut += ",";
+                if (lblResult.Text.IndexOf(",") == lblResult.Text.Length - 1)
+                    stOut += ",";
                 lblResult.Text = stOut;
             }
-            if (lblResult.Text.Length > lblResultMaxDigit) lblResult.Text = lblResult.Text.Substring(0, lblResultMaxDigit);
-
+            if (lblResult.Text.Length > lblResultMaxDigit)
+                lblResult.Text = lblResult.Text.Substring(0, lblResultMaxDigit);
             int textWidth = TextRenderer.MeasureText(lblResult.Text, lblResult.Font).Width;
             float newSize = lblResult.Font.Size * (((float)lblResult.Size.Width - lblResultWidthMargin) / textWidth);
-            if (newSize > lblResultBaseFontSize) newSize = lblResultBaseFontSize;
+            if (newSize > lblResultBaseFontSize)
+                newSize = lblResultBaseFontSize;
             lblResult.Font = new Font("Segoe UI", newSize, FontStyle.Regular);
         }
     }

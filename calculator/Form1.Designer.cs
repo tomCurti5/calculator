@@ -1,4 +1,4 @@
-﻿namespace Calculator_2023
+﻿namespace Calculator2023
 {
     partial class FormMain
     {
@@ -30,6 +30,7 @@
         {
             this.lblResult = new System.Windows.Forms.Label();
             this.panelTop = new System.Windows.Forms.Panel();
+            this.lblOperators = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblResult
@@ -52,11 +53,20 @@
             this.panelTop.Size = new System.Drawing.Size(320, 30);
             this.panelTop.TabIndex = 1;
             // 
+            // lblOperators
+            // 
+            this.lblOperators.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblOperators.Location = new System.Drawing.Point(167, 0);
+            this.lblOperators.Name = "lblOperators";
+            this.lblOperators.Size = new System.Drawing.Size(153, 30);
+            this.lblOperators.TabIndex = 2;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(320, 477);
+            this.Controls.Add(this.lblOperators);
             this.Controls.Add(this.lblResult);
             this.Controls.Add(this.panelTop);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
@@ -73,5 +83,6 @@
 
         private System.Windows.Forms.Label lblResult;
         private System.Windows.Forms.Panel panelTop;
+        private System.Windows.Forms.Label lblOperators;
     }
 }
